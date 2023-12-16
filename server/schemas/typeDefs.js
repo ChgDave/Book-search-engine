@@ -2,8 +2,8 @@ const typeDefs = `
   input BookInput {
   bookId: String!
   authors: [String]
-  description: String
-  title: String
+  description: String!
+  title: String!
   image: String
   link: String
   }
@@ -13,7 +13,7 @@ const typeDefs = `
     username: String!
     email: String!
     password: String!
-    savedBooks: [String]!
+    savedBooks: [Book!]!
   }
 
   type Book {

@@ -14,9 +14,10 @@ const resolvers = {
 
   Mutation: {
     addUser: async (parent, { username, email, password }) => {
+      console.log("ADDING USER!");
       const user = await User.create({ username, email, password });
       const token = signToken(user);
-
+      console.log(token, user);
       return { token, user };
     },
 
@@ -38,11 +39,12 @@ const resolvers = {
     },
 
     // Add a third argument to the resolver to access data in our `context`
-    saveBook: async (parent, { book }, context) => {
+    saveBook: async (parent, book, context) => {
+      console.log("Saving Book");
       // If context has a `user` property, that means the user executing this mutation has a valid JWT and is logged in
       if (context.user) {
-        return Profile.findOneAndUpdate(
-          { _id: profileId },
+        return User.findOneAndUpdate(
+          { _id: context.user._id },
           {
             $addToSet: { savedBooks: book },
           },
