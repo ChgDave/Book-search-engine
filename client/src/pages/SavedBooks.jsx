@@ -4,61 +4,39 @@ import { useQuery, useMutation } from "@apollo/client";
 // import { getMe, deleteBook } from "../utils/API";
 // import Auth from "../utils/auth";
 import { removeBookId } from "../utils/localStorage";
-import { ME } from "../utils/query";
+import { QUERY_ME } from "../utils/query";
 import { REMOVE_BOOK } from "../utils/mutation";
 
 const SavedBooks = () => {
-  // const [userData, setUserData] = useState({});
-  const { loading, userData } = useQuery(ME);
+  const { loading, data } = useQuery(QUERY_ME);
   const [deleteBook, { error }] = useMutation(REMOVE_BOOK, {
-    refetchQueries: [ME, "me"],
+    refetchQueries: [QUERY_ME, "me"],
   });
 
-  // use this to determine if `useEffect()` hook needs to run again
+  const userData = data?.me || {};
+  console.log(userData);
+
   const userDataLength = Object.keys(userData).length;
-
-  // useEffect(() => {
-  //   const getUserData = async () => {
-  //     try {
-  //       const token = Auth.loggedIn() ? Auth.getToken() : null;
-
-  //       if (!token) {
-  //         return false;
-  //       }
-
-  //       const response = await getMe(token);
-
-  //       if (!response.ok) {
-  //         throw new Error("something went wrong!");
-  //       }
-
-  //       const user = await response.json();
-  //       setUserData(user);
-  //     } catch (err) {
-  //       console.error(err);
-  //     }
-  //   };
-
-  //   getUserData();
-  // }, [userDataLength]);
 
   // create function that accepts the book's mongo _id value as param and deletes the book from the database
   const handleDeleteBook = async (bookId) => {
-    // const token = Auth.loggedIn() ? Auth.getToken() : null;
+    // try {
+    //   const response = await deleteBook(bookId);
 
-    // if (!token) {
-    //   return false;
+    //   if (!response.ok) {
+    //     throw new Error("something went wrong!");
+    //   }
+
+    //   // upon success, remove book's id from localStorage
+    //   removeBookId(bookId);
+    // } catch (err) {
+    //   console.error(err);
     // }
 
     try {
-      const response = await deleteBook(bookId);
-
-      if (!response.ok) {
-        throw new Error("something went wrong!");
-      }
-
-      // upon success, remove book's id from localStorage
-      removeBookId(bookId);
+      const { data } = await deleteBook({
+        variables: { bookId },
+      });
     } catch (err) {
       console.error(err);
     }
@@ -71,7 +49,7 @@ const SavedBooks = () => {
 
   return (
     <>
-      <div fluid className="text-light bg-dark p-5">
+      <div fluid="true" className="text-light bg-dark p-5">
         <Container>
           <h1>Viewing saved books!</h1>
         </Container>

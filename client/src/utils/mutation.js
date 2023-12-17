@@ -29,7 +29,11 @@ export const ADD_BOOK = gql`
     saveBook(book: $book) {
       _id
       username
-      savedBooks
+      savedBooks {
+        bookId
+        title
+        description
+      }
     }
   }
 `;
@@ -39,7 +43,9 @@ export const REMOVE_BOOK = gql`
     removeBook(bookId: $bookId) {
       _id
       username
-      savedBooks
+      savedBooks {
+        bookId
+      }
     }
   }
 `;
