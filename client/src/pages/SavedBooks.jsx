@@ -20,23 +20,12 @@ const SavedBooks = () => {
 
   // create function that accepts the book's mongo _id value as param and deletes the book from the database
   const handleDeleteBook = async (bookId) => {
-    // try {
-    //   const response = await deleteBook(bookId);
-
-    //   if (!response.ok) {
-    //     throw new Error("something went wrong!");
-    //   }
-
-    //   // upon success, remove book's id from localStorage
-    //   removeBookId(bookId);
-    // } catch (err) {
-    //   console.error(err);
-    // }
-
     try {
       const { data } = await deleteBook({
         variables: { bookId },
       });
+      // upon success, remove book's id from localStorage
+      removeBookId(bookId);
     } catch (err) {
       console.error(err);
     }
