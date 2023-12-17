@@ -1,11 +1,12 @@
 import { useState, useEffect } from "react";
-import { useMutation } from "@apollo/client";
+import { useMutation, useQuery } from "@apollo/client";
 import { Container, Col, Form, Button, Card, Row } from "react-bootstrap";
 
 import Auth from "../utils/auth";
 import { searchGoogleBooks } from "../utils/API";
 import { saveBookIds, getSavedBookIds } from "../utils/localStorage";
 import { ADD_BOOK } from "../utils/mutation";
+import { QUERY_ME } from "../utils/query";
 
 const SearchBooks = () => {
   const [saveBook, { error }] = useMutation(ADD_BOOK);
@@ -13,15 +14,28 @@ const SearchBooks = () => {
   const [searchedBooks, setSearchedBooks] = useState([]);
   // create state for holding our search field data
   const [searchInput, setSearchInput] = useState("");
-
+  const { loading, data } = useQuery(QUERY_ME);
+  const userData = data?.me;
   // create state to hold saved bookId values
-  const [savedBookIds, setSavedBookIds] = useState(getSavedBookIds());
+  const [savedBookIds, setSavedBookIds] = useState(
+    userData
+      ? userData.savedBooks?.map((book) => {
+          return book.bookId;
+        })
+      : []
+  );
+
+  // setSavedBookIds(userSavedBookIds);
 
   // set up useEffect hook to save `savedBookIds` list to localStorage on component unmount
   // learn more here: https://reactjs.org/docs/hooks-effect.html#effects-with-cleanup
   useEffect(() => {
     return () => saveBookIds(savedBookIds);
   });
+
+  // useEffect(() => {
+  //   saveBookIds(savedBookIds);
+  // }, [savedBookIds]);
 
   // create method to search for books and set state on form submit
   const handleFormSubmit = async (event) => {

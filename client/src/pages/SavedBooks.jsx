@@ -1,8 +1,5 @@
-// import { useState, useEffect } from "react";
 import { Container, Card, Button, Row, Col } from "react-bootstrap";
 import { useQuery, useMutation } from "@apollo/client";
-// import { getMe, deleteBook } from "../utils/API";
-// import Auth from "../utils/auth";
 import { removeBookId } from "../utils/localStorage";
 import { QUERY_ME } from "../utils/query";
 import { REMOVE_BOOK } from "../utils/mutation";
@@ -10,11 +7,10 @@ import { REMOVE_BOOK } from "../utils/mutation";
 const SavedBooks = () => {
   const { loading, data } = useQuery(QUERY_ME);
   const [deleteBook, { error }] = useMutation(REMOVE_BOOK, {
-    refetchQueries: [QUERY_ME, "me"],
+    refetchQueries: [QUERY_ME, "myProfile"],
   });
 
   const userData = data?.me || {};
-  console.log(userData);
 
   const userDataLength = Object.keys(userData).length;
 
