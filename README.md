@@ -196,9 +196,9 @@ This project is licensed under MIT License
 
 https://github.com/ChgDave/Book-search-engine
 
-## Deployed link on heroku
+## Deployed link on render
 
-https://blogems-a6ce292e1cff.herokuapp.com/
+https://book-search-engine-6rdl.onrender.com/
 
 ## Questions
 
